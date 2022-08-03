@@ -1,5 +1,6 @@
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
@@ -7,6 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 
 @ExtendWith(MockitoExtension.class)
 public class HipodromeTest {
@@ -65,4 +67,27 @@ public class HipodromeTest {
 
     }
 
+    @Test
+    public void whenMoveThenMoveAllHorses() {
+        Horse mockHorse = Mockito.mock(Horse.class);
+        ArrayList<Horse> horses = new ArrayList<>(50);
+        for(int i=0;i<50;i++) {
+            horses.add(i,mockHorse);
+        }
+        Hippodrome hippodrome = new Hippodrome(horses);
+        hippodrome.move();
+        Mockito.verify(mockHorse, Mockito.times(50)).move();
+    }
+    @Test
+    public void whenGetWinnerReturnMaxDistance() {
+        Horse[]horses=new Horse[5];
+        horses[0]=new Horse("Antalia", 20.0, 10);
+        horses[1]=new Horse("Alania", 20.0, 20);
+        horses[2]=new Horse("Adelina", 20.0, 30);
+        horses[3]=new Horse("Adel", 20.0, 40);
+        horses[4]=new Horse("Arina", 20.0, 50);
+        List<Horse>horsesList=Arrays.asList(horses);
+        Hippodrome hippodrome = new Hippodrome(horsesList);
+        assertEquals(horses[4], hippodrome.getWinner());
+    }
 }

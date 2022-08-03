@@ -14,40 +14,26 @@ import static org.mockito.Mockito.times;
 public class HorseTest {
 
 
-    @ParameterizedTest
-    @CsvSource({
-            "null, 50.5, 100.255",
-            "null, 65.0, 100.255"
-    })
-    public void createHorseWithNullNameThenException(String name, double speed, double distance){
-
+    @Test
+    public void createHorseWithNullNameThenException(){
         assertThrows(IllegalArgumentException.class,
-                ()->{new Horse(name, speed, distance);}
+                ()->{new Horse(null, 50.5, 100.255);}
         );
     }
 
 
-    @ParameterizedTest
-    @CsvSource({
-            "null, 50.5",
-            "null, 65.0"
-    })
-    public void createHorseWithNullNameThenException(String name, double speed){
-
+    @Test
+    public void createHorseWithNullNameThenExceptionTwoArguments(){
         assertThrows(IllegalArgumentException.class,
-                ()->{new Horse(name, speed);}
+                ()->{new Horse(null, 50.5);}
         );
     }
 
 
-    @ParameterizedTest
-    @CsvSource({
-            "null, 50.5, 100.255"
-    })
-    public void createHorseWithNullNameThenMassage(String name, double speed, double distance){
-
+    @Test
+    public void createHorseWithNullNameThenMassage(){
         Throwable exception =assertThrows(IllegalArgumentException.class,
-                ()->{new Horse(name, speed, distance);}
+                ()->{new Horse(null, 50.5, 100.255);}
         );
         assertEquals("Name cannot be null.",exception.getMessage());
     }
@@ -64,23 +50,27 @@ public class HorseTest {
                 ()->{new Horse(name, speed, distance);}
         );
     }
-
-    @ParameterizedTest
-    @CsvSource({
-            ", 50.5, 100.255",
-            "   , 65.0, 100.255",
-            "       ,50.5, 100.255"
-    })
-    public void createHorseWithEmptyNameThenMassage(String name, double speed, double distance){
+    @Test
+    public void createHorseWithEmptyNameThenMassageNoParametrized(){
 
         Throwable exception =assertThrows(IllegalArgumentException.class,
-                ()->{new Horse(name, speed, distance);}
+                ()->{new Horse("   ",50.5, 100.255);}
+        );
+        assertEquals("Name cannot be blank.",exception.getMessage());
+    }
+
+    @Test
+    public void createHorseWithEmptyNameThenMassage(){
+
+        Throwable exception =assertThrows(IllegalArgumentException.class,
+                ()->{new Horse("", 50.5, 100.255);}
         );
         assertEquals("Name cannot be blank.",exception.getMessage());
     }
     @ParameterizedTest
     @CsvSource({
-            "Aport, -50.5, 100.255"
+            "Aport, -50.5, 100.255",
+            "Aport, -20.5, 100.255"
     })
     public void createHorseWithNegativeSpeedThenException(String name, double speed, double distance){
 
@@ -141,7 +131,7 @@ public class HorseTest {
 public void whenMoveThenGetRandomDouble() {
         try (MockedStatic<Horse> staticGetRandom = Mockito.mockStatic(Horse.class)) {
             staticGetRandom.when(() -> Horse.getRandomDouble(0.2, 0.9)).thenReturn(0.7);
-            Horse horse = Mockito.mock(Horse.class);
+            Horse horse=new Horse("Zvezdochka", 50.5);
             horse.move();
             staticGetRandom.verify(() -> Horse.getRandomDouble(0.2, 0.9), times(1));
         }
