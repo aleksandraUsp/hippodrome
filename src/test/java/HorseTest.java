@@ -42,7 +42,7 @@ public class HorseTest {
     @CsvSource({
             ", 50.5, 100.255",
             "   , 65.0, 100.255",
-            "       ,50.5, 100.255"
+            "       \n\n\n,50.5, 100.255"
     })
     public void createHorseWithEmptyNameThenException(String name, double speed, double distance){
 
